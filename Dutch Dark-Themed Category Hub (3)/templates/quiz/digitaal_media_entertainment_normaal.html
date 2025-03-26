@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Digitaal, Media & Entertainment - Normaal Quiz</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/styles.css" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+<body>
+  <div class="container mt-5 digitaal-media-entertainment quiz-container">
+    <h1 class="text-center mb-5">Digitaal, Media & Entertainment - Normaal</h1>
+    <div id="quiz-content" class="text-center">
+      <h2 id="question" class="mb-4"></h2>
+      <div id="answers" class="d-grid gap-3">
+        <button class="btn difficulty-button" data-answer="A"></button>
+        <button class="btn difficulty-button" data-answer="B"></button>
+        <button class="btn difficulty-button" data-answer="C"></button>
+        <button class="btn difficulty-button" data-answer="D"></button>
+      </div>
+      <div id="feedback" class="mt-4" style="display: none;">
+        <i id="feedback-icon" class="bi" style="font-size: 4rem;"></i>
+        <p id="correct-answer" class="mt-3 text-white"></p>
+      </div>
+    </div>
+    <div class="container text-center mt-4">
+      <a href="/digitaal-media-entertainment" class="btn btn-secondary">Terug</a>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        question: "Wat doet een VPN (Virtual Private Network) vooral?",
+        answers: {
+          A: "Het versnelt je internetverbinding",
+          B: "Het versleutelt je internetverkeer en beschermt je privacy", 
+          C: "Het maakt je computer sneller",
+          D: "Het voorkomt virussen op je apparaat"
+        },
+        correctAnswer: "B"
+      },
+      {
+        question: "Wat is het belangrijkste verschil tussen OLED- en LCD-schermen?",
+        answers: {
+          A: "OLED-schermen hebben achtergrondverlichting nodig, LCD-schermen niet",
+          B: "LCD-schermen bieden betere zwartwaarden dan OLED",
+          C: "OLED-schermen verbruiken meestal minder stroom dan LCD", 
+          D: "LCD-schermen zijn flexibeler dan OLED"
+        },
+        correctAnswer: "C"
+      }
+    ];
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const questionEl = document.getElementById('question');
+      const answersEl = document.getElementById('answers');
+      const feedbackEl = document.getElementById('feedback');
+      const feedbackIconEl = document.getElementById('feedback-icon');
+      const correctAnswerEl = document.getElementById('correct-answer');
+
+      // Select a random question
+      const randomQuestion = questions[Math.floor(Math.random() * questions.length)];
+
+      // Display the question
+      questionEl.textContent = randomQuestion.question;
+
+      // Populate answer buttons
+      Object.keys(randomQuestion.answers).forEach(key => {
+        const button = document.querySelector(`[data-answer="${key}"]`);
+        button.textContent = randomQuestion.answers[key];
+        button.addEventListener('click', () => handleAnswer(key, randomQuestion.correctAnswer));
+      });
+
+      function handleAnswer(selectedAnswer, correctAnswer) {
+        // Disable further clicks
+        answersEl.querySelectorAll('button').forEach(btn => {
+          btn.disabled = true;
+          btn.classList.remove('difficulty-button');
+        });
+
+        // Show feedback
+        feedbackEl.style.display = 'block';
+        if (selectedAnswer === correctAnswer) {
+          feedbackIconEl.classList.add('bi-check-circle-fill', 'text-success');
+        } else {
+          feedbackIconEl.classList.add('bi-x-circle-fill', 'text-danger');
+          correctAnswerEl.textContent = `Juiste antwoord: ${randomQuestion.answers[correctAnswer]}`;
+        }
+
+        // Redirect to home after 3 seconds
+        setTimeout(() => {
+          window.location.href = '/';
+        }, 3000);
+      }
+    });
+  </script>
+</body>
+</html>
